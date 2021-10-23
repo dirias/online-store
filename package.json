@@ -1,0 +1,29 @@
+{
+  "name": "online-store",
+  "version": "1.0.0",
+  "description": "online store built with node.js and express.js, using API REST",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "start": "node index.js",
+    "lint": "eslint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dirias/online-store.git"
+  },
+  "keywords": [],
+  "author": "Didier Irias <didier.irias@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dirias/online-store/issues"
+  },
+  "homepage": "https://github.com/dirias/online-store#readme",
+  "devDependencies": {
+    "eslint": "^8.1.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "nodemon": "^2.0.14",
+    "prettier": "^2.4.1"
+  }
+}
