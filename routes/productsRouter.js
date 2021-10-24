@@ -1,34 +1,62 @@
 const express = require('express');
-const faker = require('faker');
+const ProductsService = require('../services/productService');
 
 const router = express.Router();
+const service = new ProductsService();
 
-router.get('/', (request, response) => {
-  const products = [];
-  const { size } = request.query;
-  const limit = size || 10;
-  for (let index = 0; index < limit; index++) {
-    products.push({
-      name: faker.commerce.productName(),
-      price: '$' + parseInt(faker.commerce.price(), 10),
-      image: faker.image.imageUrl(),
-    });
-
-  }
+router.get('/', async (request, response) => {
+  const products = await service.find();
   response.json(products);
+
 });
 // Los endpoints especificos deben declararsen antes de los endpoints dinamicos. Uno de los mandamientos.
 router.get('/filter', (req, res) => {
   res.send('Soy un filter');
 });
 
-router.get('/:id', (request, response) => {
+router.get('/:id', async (request, response) => {
   const { id } = request.params;
-  response.json({
-    id,
-    name: 'Product 2',
-    price: '2500'
-  });
+  const product = await service.findOne(id);
+
+  response.json(product);
 });
 
+router.post('/', async (req, res) => {
+  const body = req.body;
+  const newProduct = await service.create(body);
+
+  res.status(201).json({
+    message: 'Created',
+    data: newProduct
+  });
+
+});
+//Recibe objetos de forma parceal
+router.patch('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const body = req.body;
+    const product = await service.update(id, body);
+    res.json({
+      message: 'Updated',
+      data: product,
+      id
+    });
+
+  } catch (error) {
+    res.status(404).json({
+      message: error.message
+    });
+  }
+
+});
+//Delete
+router.delete('/:id', async (req, res) => {
+  const { id } = req.params;
+  const rta = await service.delete(id);
+  res.json({
+    message: 'Deleted',
+    rta
+  });
+});
 module.exports = router;
