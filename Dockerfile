@@ -1,28 +1,13 @@
-#Credits: https://github.com/badele/docker-insomnia
-FROM ubuntu:18.04
-#FROM node:11.1-stretch
+FROM node:14
 
-# Install nodejs
-RUN apt-get clean
-RUN apt-get update
-#RUN apt-get -y --fix-missing upgrademk
+COPY ["package.json", "package-lock.json", "/usr/src/"]
 
-RUN apt-get install -y wget apt-transport-https git npm nodejs
+WORKDIR /usr/src
 
+RUN npm install
 
-#Install required packages (for insomnia installation)
-RUN apt-get install -y libcurl4-gnutls-dev libfontconfig1-dev libgtk-3-0 libxss1 libgtkextra-dev libgconf2-dev libnss3 libasound2 libxtst-dev
+COPY [".", "/usr/src/"]
 
-# Install electron
-RUN npm install -g electron
+EXPOSE 3000
 
-# Install insomnia
-
-RUN cd /opt && git clone https://github.com/getinsomnia/insomnia.git && cd insomnia
-
-RUN cd /opt/insomnia && npm run bootstrap
-#&& npm test
-
-ENV DISPLAY :0
-WORKDIR /opt/insomnia
-CMD npm run app-start
+CMD ["npm", "run", "dev"]
