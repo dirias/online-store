@@ -1,46 +1,44 @@
 const express = require('express');
+const cors = require('cors');
 const routerApi = require('./routes');
+const { logErrors, errorHandler, boomErrorHandler } = require('./middlewares/errorHandler');
+
 const app = express();
 const port = 3000;
 
 //User middlewere
 app.use(express.json());
+//FIxing CORS
+
+const whitelist = ['https://localhost:8080', 'https://myapp.didier.com'];
+const options = {
+  origin: (origin, cb) => {
+    if (whitelist.includes(origin)) {
+      cb(null, true);
+    } else {
+      cb(new Error('No permitido'));
+    }
+  }
+}
 
 routerApi(app);
 
-app.get('/', (request, response) =>{
+app.use(cors(options));
+
+//Middlewares
+app.use(logErrors);
+app.use(errorHandler);
+app.use(boomErrorHandler);
+
+app.get('/', (request, response) => {
   response.send('This is the home page');
 });
 
-app.get('/about', (request, response) =>{
-  response.send('This is about');
-});
-/*
 
 
-app.get('/categories/:categoryId/products/:productId', (req, res) => {
-  const {categoryId, productId} = req.params;
-
-  res.json({
-    categoryId,
-    productId
-  });
-});
-//GET: parámetros query
-
-app.get('/users', (req, res) => {
-  const {limit, offset} = req.query;
-  if (limit && offset){
-    res.json({
-      limit,
-      offset
-    });
-  }else{
-    res.send('No hay parametros');
-
-  }
-});*/
-app.listen(port, () =>{
+//En el orden en el que se ponen es el orden en el que se ejecutan
+app.listen(port, () => {
   console.log('Running on port ' + port);
 });
+
 
