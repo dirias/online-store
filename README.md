@@ -17,6 +17,14 @@ API Rest for a online store built with node.js and express.js.
 - faker
   
 # 📡 Endpoints
+## For products
+  - get all users: /api/v1/products/
+  - get one user: /api/v1/products/:id
+  - Create user: /api/v1/products/
+  - update user: /api/v1/products/:id
+  - delete user: /api/v1/products/:id
+## For Users
+  - get all users: /api/v1/users/
 
 # Resources
 ## 📑 Spanish Course Notes 

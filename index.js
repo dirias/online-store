@@ -31,7 +31,7 @@ app.use(errorHandler);
 app.use(boomErrorHandler);
 
 app.get('/', (request, response) => {
-  response.send('This is the home page');
+  response.send('Homepage');
 });
 
 

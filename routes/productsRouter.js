@@ -1,22 +1,21 @@
+//imports
 const express = require('express');
 const ProductsService = require('../services/productService');
 const validatorHandler = require('../middlewares/validatorHandler');
-const { createProducSchema, updateProducSchema, getProducSchema } = require('../schemas/producSchema');
+const { createProductSchema, updateProductSchema, getProductSchema } = require('../schemas/productSchema');
 
 const router = express.Router();
 const service = new ProductsService();
+
+
 
 router.get('/', async (request, response) => {
   const products = await service.find();
   response.json(products);
 
 });
-// Los endpoints especificos deben declararsen antes de los endpoints dinamicos. Uno de los mandamientos.
-router.get('/filter', (req, res) => {
-  res.send('Soy un filter');
-});
 
-router.get('/:id', validatorHandler(getProducSchema, 'params'), async (request, response, next) => {
+router.get('/:id', validatorHandler(getProductSchema, 'params'), async (request, response, next) => {
   try {
     const { id } = request.params;
     const product = await service.findOne(id);
@@ -27,7 +26,7 @@ router.get('/:id', validatorHandler(getProducSchema, 'params'), async (request, 
   }
 });
 
-router.post('/', validatorHandler(createProducSchema, 'params'), async (req, res) => {
+router.post('/', validatorHandler(createProductSchema, 'params'), async (req, res) => {
   const body = req.body;
   const newProduct = await service.create(body);
 
@@ -39,8 +38,8 @@ router.post('/', validatorHandler(createProducSchema, 'params'), async (req, res
 });
 //Recibe objetos de forma partial
 router.patch('/:id',
-  validatorHandler(getProducSchema, 'params'),
-  validatorHandler(updateProducSchema, 'body'),
+  validatorHandler(getProductSchema, 'params'),
+  validatorHandler(updateProductSchema, 'body'),
   async (req, res, next) => {
     try {
       const { id } = req.params;
